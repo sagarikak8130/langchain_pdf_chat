@@ -1,0 +1,6 @@
+flask
+werkzeug
+python-dotenv
+langchain
+langchain-openai
+faiss-cpu 

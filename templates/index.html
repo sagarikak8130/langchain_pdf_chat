@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LangChain PDF Chat</title>
+</head>
+<body>
+    <h1>Ask Questions from PDF</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+        <label>Upload PDF:</label>
+        <input type="file" name="pdf"><br><br>
+        
+        <label>Enter your question:</label>
+        <input type="text" name="question" required><br><br>
+        
+        <input type="submit" value="Ask">
+    </form>
+
+    {% if answer %}
+        <h2>Answer:</h2>
+        <p>{{ answer }}</p>
+    {% endif %}
+
+    {% if chat_history %}
+        <h3>Chat History</h3>
+        <ul>
+            {% for msg in chat_history %}
+                <li><b>{{ msg.type }}:</b> {{ msg.content }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
