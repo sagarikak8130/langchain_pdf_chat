@@ -26,11 +26,9 @@ def build_conversational_chain(vectorstore):
     )
 
     history_aware_retriever  = create_history_aware_retriever(
-        llm=llm,
-        retriever=vectorstore.as_retriever(),
-        condense_question_prompt=condense_question_prompt,
-        memory=memory,
-        return_source_documents=False
+        llm,
+        vectorstore.as_retriever(),
+        condense_question_prompt
     )
     
     system_prompt = (

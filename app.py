@@ -22,10 +22,17 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 # Store retriever & memory per session
 chains = {}
 
+@app.before_request
+def assign_session_id():
+    if "user_id" not in session:
+        session["user_id"] = str(uuid.uuid4())
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     answer = None
     chat_history = []
+    user_id = session['user_id']
+
 
     if request.method == "POST":
         question = request.form.get("question")
@@ -43,19 +50,21 @@ def index():
             # Build vector store & chain
             vectorstore = process_pdf(filepath)
             chain, memory = build_conversational_chain(vectorstore)
-            chains[session.sid] = {"chain": chain, "memory": memory}
+            chains[user_id] = {"chain": chain, "memory": memory}
 
         elif 'filepath' in session:
             filepath = session['filepath']
 
         # Answer question
-        if question and session.sid in chains:
-            chain = chains[session.sid]['chain']
-            memory = chains[session.sid]['memory']
-            answer = chain.invoke({"input": question, "chat_history": memory.chat_memory.messages})
+        if question and user_id in chains:
+            chain = chains[user_id]['chain']
+            memory = chains[user_id]['memory']
+            # answer = chain.invoke({"input": question, "chat_history": memory.chat_memory.messages})
+            response = chain.invoke({"input": question,"chat_history": memory.chat_memory.messages})
+            answer = response['answer']
             chat_history = memory.chat_memory.messages
 
     return render_template("index.html", answer=answer, chat_history=chat_history)
  
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True,use_reloader=False)
