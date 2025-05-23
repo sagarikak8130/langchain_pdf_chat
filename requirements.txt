@@ -1,6 +1,10 @@
-flask
-werkzeug
-python-dotenv
-langchain
-langchain-openai
-faiss-cpu 
+flask==3.0.0
+werkzeug==3.0.1
+python-dotenv==1.0.0
+langchain==0.3.25
+langchain-openai==0.3.17
+langchain-community==0.3.24
+faiss-cpu==1.11.0
+pypdf==5.5.0
+numpy==2.2.6
+openai==1.79.0 
